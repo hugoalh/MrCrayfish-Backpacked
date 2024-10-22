@@ -6,6 +6,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.mrcrayfish.backpacked.Config;
 import com.mrcrayfish.backpacked.Constants;
+import com.mrcrayfish.backpacked.client.ClientRegistry;
+import com.mrcrayfish.backpacked.client.backpack.ClientBackpack;
 import com.mrcrayfish.backpacked.client.gui.screen.widget.CheckBox;
 import com.mrcrayfish.backpacked.client.renderer.backpack.BackpackRenderContext;
 import com.mrcrayfish.backpacked.common.backpack.Backpack;
@@ -88,7 +90,7 @@ public class CustomiseBackpackScreen extends Screen
         this.windowHeight = 166;
         Comparator<BackpackModelEntry> compareUnlock = Comparator.comparing(e -> !e.backpack.isUnlocked(Minecraft.getInstance().player));
         Comparator<BackpackModelEntry> compareLabel = Comparator.comparing(e -> e.label.getString());
-        List<BackpackModelEntry> models = BackpackManager.instance().getClientBackpacks()
+        List<BackpackModelEntry> models = ClientRegistry.instance().getBackpacks()
                 .stream()
                 .map(backpack -> new BackpackModelEntry(backpack, progressMap))
                 .sorted(compareUnlock.thenComparing(compareLabel))
@@ -224,14 +226,14 @@ public class CustomiseBackpackScreen extends Screen
         drawBackpackInGui(this.minecraft, graphics, this.displayStack, entry.getBackpack(), x + 10, y + 10, partialTick);
     }
 
-    public static void drawBackpackInGui(Minecraft mc, GuiGraphics graphics, ItemStack stack, Backpack backpack, int x, int y, float partialTick)
+    public static void drawBackpackInGui(Minecraft mc, GuiGraphics graphics, ItemStack stack, ClientBackpack backpack, int x, int y, float partialTick)
     {
         PoseStack pose = graphics.pose();
         pose.pushPose();
         pose.translate(x, y, 150);
         pose.mulPose(new Matrix4f().scaling(1.0F, -1.0F, 1.0F));
         pose.scale(16, 16, 16);
-        ModelMeta meta = BackpackManager.instance().getModelMeta(backpack);
+        ModelMeta meta = ClientRegistry.instance().getModelMeta(backpack);
         meta.guiDisplay().ifPresent(transform -> transform.apply(false, pose));
         meta.renderer().ifPresentOrElse(renderer -> {
             BackpackRenderContext context = new BackpackRenderContext(pose, graphics.bufferSource(), 0xF000F0, stack, backpack, mc.player, partialTick, mc.player.tickCount, model -> {
@@ -413,11 +415,11 @@ public class CustomiseBackpackScreen extends Screen
     private static class BackpackModelEntry
     {
         private final ResourceLocation cosmeticId;
-        private final Backpack backpack;
+        private final ClientBackpack backpack;
         private final Component label;
         private final List<FormattedCharSequence> unlockTooltip;
 
-        public BackpackModelEntry(Backpack backpack, Map<ResourceLocation, Component> progressMap)
+        public BackpackModelEntry(ClientBackpack backpack, Map<ResourceLocation, Component> progressMap)
         {
             this.cosmeticId = backpack.getId();
             this.backpack = backpack;
@@ -448,7 +450,7 @@ public class CustomiseBackpackScreen extends Screen
             return this.unlockTooltip;
         }
 
-        public Backpack getBackpack()
+        public ClientBackpack getBackpack()
         {
             return this.backpack;
         }

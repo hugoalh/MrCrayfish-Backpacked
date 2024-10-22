@@ -1,5 +1,6 @@
 package com.mrcrayfish.backpacked.client.gui.toasts;
 
+import com.mrcrayfish.backpacked.client.backpack.ClientBackpack;
 import com.mrcrayfish.backpacked.client.gui.screen.CustomiseBackpackScreen;
 import com.mrcrayfish.backpacked.common.backpack.Backpack;
 import com.mrcrayfish.backpacked.core.ModItems;
@@ -20,10 +21,10 @@ public class UnlockBackpackToast implements Toast
     private static final ResourceLocation BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("toast/recipe");
     private static final Component TITLE = Component.translatable("backpacked.toast.unlocked_backpack").withStyle(ChatFormatting.GOLD);
 
-    private final Backpack backpack;
+    private final ClientBackpack backpack;
     private final Component name;
 
-    public UnlockBackpackToast(Backpack backpack)
+    public UnlockBackpackToast(ClientBackpack backpack)
     {
         this.backpack = backpack;
         this.name = Component.translatable(backpack.getTranslationKey()).withStyle(ChatFormatting.DARK_GRAY);

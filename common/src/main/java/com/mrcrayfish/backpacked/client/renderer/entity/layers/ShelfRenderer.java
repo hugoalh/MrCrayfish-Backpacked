@@ -3,14 +3,13 @@ package com.mrcrayfish.backpacked.client.renderer.entity.layers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.mrcrayfish.backpacked.blockentity.ShelfBlockEntity;
+import com.mrcrayfish.backpacked.client.ClientRegistry;
+import com.mrcrayfish.backpacked.client.backpack.ClientBackpack;
 import com.mrcrayfish.backpacked.client.renderer.backpack.BackpackRenderContext;
-import com.mrcrayfish.backpacked.common.backpack.Backpack;
-import com.mrcrayfish.backpacked.common.backpack.BackpackManager;
 import com.mrcrayfish.backpacked.common.backpack.BackpackProperties;
 import com.mrcrayfish.backpacked.common.backpack.ModelMeta;
 import com.mrcrayfish.backpacked.core.ModDataComponents;
 import com.mrcrayfish.backpacked.core.ModItems;
-import com.mrcrayfish.backpacked.platform.ClientServices;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -20,7 +19,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
@@ -50,7 +48,7 @@ public class ShelfRenderer implements BlockEntityRenderer<ShelfBlockEntity>
             return;
 
         BackpackProperties properties = stack.getOrDefault(ModDataComponents.BACKPACK_PROPERTIES.get(), BackpackProperties.DEFAULT);
-        Backpack backpack = BackpackManager.instance().getClientBackpackOrDefault(properties.model());
+        ClientBackpack backpack = ClientRegistry.instance().getBackpackOrDefault(properties.model());
         if(backpack == null)
             return;
 
@@ -62,7 +60,7 @@ public class ShelfRenderer implements BlockEntityRenderer<ShelfBlockEntity>
         pose.translate(0.5, -6 * 0.0625, -5 * 0.0625);
 
         // Apply shelf offset since models can have different shapes and sizes
-        ModelMeta meta = BackpackManager.instance().getModelMeta(backpack);
+        ModelMeta meta = ClientRegistry.instance().getModelMeta(backpack);
         Vector3f offset = meta.shelfOffset();
         pose.translate(offset.x * 0.0625, offset.z * 0.0625, -offset.y * 0.0625);
 

@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import com.mrcrayfish.backpacked.client.ClientRegistry;
 import com.mrcrayfish.backpacked.common.backpack.Backpack;
 import com.mrcrayfish.backpacked.common.backpack.BackpackManager;
 import net.minecraft.resources.ResourceLocation;
@@ -32,7 +33,7 @@ public class BackpackArgument implements ArgumentType<Backpack>
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder)
     {
-        BackpackManager.instance().getClientBackpacks().forEach(backpack -> builder.suggest(backpack.getId().toString()));
+        ClientRegistry.instance().getBackpacks().forEach(backpack -> builder.suggest(backpack.getId().toString()));
         return builder.buildFuture();
     }
 }

@@ -3,6 +3,8 @@ package com.mrcrayfish.backpacked.client.renderer.entity.layers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.mrcrayfish.backpacked.Constants;
+import com.mrcrayfish.backpacked.client.ClientRegistry;
+import com.mrcrayfish.backpacked.client.backpack.ClientBackpack;
 import com.mrcrayfish.backpacked.client.renderer.backpack.BackpackRenderContext;
 import com.mrcrayfish.backpacked.common.backpack.Backpack;
 import com.mrcrayfish.backpacked.common.backpack.BackpackManager;
@@ -51,7 +53,7 @@ public class VillagerBackpackLayer<T extends AbstractVillager, M extends Village
             if(villager.isInvisible())
                 return;
 
-            Backpack backpack = BackpackManager.instance().getClientBackpack(WANDERING_BACKPACK);
+            ClientBackpack backpack = ClientRegistry.instance().getBackpack(WANDERING_BACKPACK);
             if(backpack == null)
                 return;
 
@@ -60,7 +62,7 @@ public class VillagerBackpackLayer<T extends AbstractVillager, M extends Village
             pose.scale(1F, -1F, -1F);
             pose.translate(0, -0.06, 3.5 * 0.0625);
 
-            ModelMeta meta = BackpackManager.instance().getModelMeta(backpack);
+            ModelMeta meta = ClientRegistry.instance().getModelMeta(backpack);
             meta.renderer().ifPresentOrElse(renderer -> {
                 pose.pushPose();
                 BackpackRenderContext context = new BackpackRenderContext(pose, source, light, this.displayStack, backpack, villager, partialTick, villager.tickCount, model -> {

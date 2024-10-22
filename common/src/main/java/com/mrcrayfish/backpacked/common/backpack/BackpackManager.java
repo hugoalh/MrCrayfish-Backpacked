@@ -35,8 +35,6 @@ public final class BackpackManager
     }
 
     private Map<ResourceLocation, Backpack> loadedBackpacks = new HashMap<>();
-    private Map<ResourceLocation, Backpack> clientBackpacks = new HashMap<>();
-    private Map<ResourceLocation, ModelMeta> clientModelMeta = new HashMap<>();
 
     private BackpackManager()
     {
@@ -58,19 +56,6 @@ public final class BackpackManager
         this.loadedBackpacks = map;
     }
 
-    public void updateModelMeta(Map<ResourceLocation, ModelMeta> map)
-    {
-        this.clientModelMeta = map;
-    }
-
-    public void updateClientBackpacks(List<Backpack> backpacks)
-    {
-        this.clientBackpacks.clear();
-        backpacks.forEach(backpack -> {
-            this.clientBackpacks.put(backpack.getId(), backpack);
-        });
-    }
-
     @Nullable
     public Backpack getBackpack(ResourceLocation id)
     {
@@ -80,35 +65,6 @@ public final class BackpackManager
     public List<Backpack> getBackpacks()
     {
         return ImmutableList.copyOf(this.loadedBackpacks.values());
-    }
-
-    @Nullable
-    public Backpack getClientBackpack(ResourceLocation id)
-    {
-        return this.clientBackpacks.get(id);
-    }
-
-    @Nullable
-    public Backpack getClientBackpackOrDefault(ResourceLocation id)
-    {
-        // Try getting the backpack with the given id
-        Backpack backpack = this.clientBackpacks.get(id);
-        if(backpack != null)
-        {
-            return backpack;
-        }
-        // Otherwise get the default cosmetic.
-        return this.clientBackpacks.get(getDefaultOrFallbackCosmetic());
-    }
-
-    public List<Backpack> getClientBackpacks()
-    {
-        return ImmutableList.copyOf(this.clientBackpacks.values());
-    }
-
-    public ModelMeta getModelMeta(Backpack backpack)
-    {
-        return this.clientModelMeta.getOrDefault(backpack.getId(), ModelMeta.DEFAULT);
     }
 
     public void unlockBackpack(ServerPlayer player, ResourceLocation id)

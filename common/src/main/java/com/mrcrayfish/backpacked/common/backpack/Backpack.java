@@ -3,13 +3,10 @@ package com.mrcrayfish.backpacked.common.backpack;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mrcrayfish.backpacked.Config;
-import com.mrcrayfish.backpacked.Constants;
 import com.mrcrayfish.backpacked.common.challenge.Challenge;
 import com.mrcrayfish.backpacked.common.challenge.impl.DummyChallenge;
 import com.mrcrayfish.backpacked.common.tracker.IProgressTracker;
 import com.mrcrayfish.backpacked.data.unlock.UnlockManager;
-import com.mrcrayfish.framework.api.client.FrameworkClientAPI;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -43,8 +40,6 @@ public class Backpack
 
     private final Optional<Challenge> challenge;
     private ResourceLocation id;
-    private ModelResourceLocation baseModel;
-    private ModelResourceLocation strapsModel;
     private String translationKey;
     private boolean setup = false;
 
@@ -76,18 +71,6 @@ public class Backpack
         return this.translationKey;
     }
 
-    public ModelResourceLocation getBaseModel()
-    {
-        this.checkSetup();
-        return this.baseModel;
-    }
-
-    public ModelResourceLocation getStrapsModel()
-    {
-        this.checkSetup();
-        return this.strapsModel;
-    }
-
     public boolean isUnlocked(Player player)
     {
         return UnlockManager.getTracker(player).map(tracker -> tracker.isUnlocked(this.id)).orElse(false) || this.challenge.isEmpty() || Config.SERVER.backpack.unlockAllCosmetics.get();
@@ -104,15 +87,12 @@ public class Backpack
         if(!this.setup)
         {
             this.id = id;
-            String name = "backpacked/" + id.getPath();
-            this.baseModel = FrameworkClientAPI.createModelResourceLocation(id.getNamespace(), name);
-            this.strapsModel = FrameworkClientAPI.createModelResourceLocation(id.getNamespace(), name + "_straps");
             this.translationKey = "backpack.%s.%s".formatted(id.getNamespace(), id.getPath());
             this.setup = true;
         }
     }
 
-    private void checkSetup()
+    protected void checkSetup()
     {
         if(!this.setup)
         {

@@ -1,5 +1,7 @@
 package com.mrcrayfish.backpacked.network.play;
 
+import com.mrcrayfish.backpacked.client.ClientRegistry;
+import com.mrcrayfish.backpacked.client.backpack.ClientBackpack;
 import com.mrcrayfish.backpacked.client.gui.screen.CustomiseBackpackScreen;
 import com.mrcrayfish.backpacked.client.gui.toasts.UnlockBackpackToast;
 import com.mrcrayfish.backpacked.common.backpack.Backpack;
@@ -29,7 +31,7 @@ public class ClientPlayHandler
         Player player = mc.player;
         UnlockManager.getTracker(player).ifPresent(impl ->
         {
-            Backpack backpack = BackpackManager.instance().getClientBackpack(message.cosmeticId());
+            ClientBackpack backpack = ClientRegistry.instance().getBackpack(message.cosmeticId());
             if(backpack != null)
             {
                 impl.unlockBackpack(message.cosmeticId());

@@ -7,6 +7,7 @@ import com.google.gson.JsonParseException;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.mrcrayfish.backpacked.Constants;
+import com.mrcrayfish.backpacked.client.ClientRegistry;
 import com.mrcrayfish.backpacked.common.backpack.BackpackManager;
 import com.mrcrayfish.backpacked.common.backpack.ModelMeta;
 import net.minecraft.resources.FileToIdConverter;
@@ -58,6 +59,6 @@ public class ModelMetaLoader extends SimplePreparableReloadListener<Map<Resource
     @Override
     protected void apply(Map<ResourceLocation, ModelMeta> map, ResourceManager manager, ProfilerFiller filler)
     {
-        BackpackManager.instance().updateModelMeta(map);
+        ClientRegistry.instance().updateModelMeta(map);
     }
 }
