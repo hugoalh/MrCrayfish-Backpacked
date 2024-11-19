@@ -9,14 +9,20 @@ import com.mrcrayfish.backpacked.common.backpack.loader.ModelMetaLoader;
 import com.mrcrayfish.backpacked.core.ModBlockEntities;
 import com.mrcrayfish.backpacked.core.ModContainers;
 import com.mrcrayfish.backpacked.core.ModItems;
+import com.mrcrayfish.framework.api.client.FrameworkClientAPI;
 import io.wispforest.accessories.api.AccessoriesAPI;
 import io.wispforest.accessories.api.client.AccessoriesRendererRegistry;
 import io.wispforest.accessories.api.client.AccessoryRenderer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.WanderingTraderRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -25,9 +31,12 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
+
+import java.util.Map;
 
 /**
  * Author: MrCrayfish
@@ -84,5 +93,17 @@ public class ClientHandler
         {
             playerRenderer.addLayer(new BackpackLayer<>(playerRenderer, itemRenderer));
         }
+    }
+
+    @SubscribeEvent
+    private static void onRegisterClientLoaders(ModelEvent.RegisterAdditional event)
+    {
+        ResourceManager manager = Minecraft.getInstance().getResourceManager();
+        Map<ResourceLocation, Resource> models = manager.listResources("models/backpacked", location -> location.getPath().endsWith(".json"));
+        models.forEach((key, resource) -> {
+            String path = key.getPath().substring("models/".length(), key.getPath().length() - ".json".length());
+            ModelResourceLocation location = FrameworkClientAPI.createModelResourceLocation(key.getNamespace(), path);
+            event.register(location);
+        });
     }
 }

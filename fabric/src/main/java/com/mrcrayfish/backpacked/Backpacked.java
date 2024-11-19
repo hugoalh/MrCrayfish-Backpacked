@@ -32,6 +32,6 @@ public class Backpacked implements ModInitializer
             return InteractionResult.PASS;
         });
         AccessoriesAPI.registerAccessory(ModItems.BACKPACK.get(), new BackpackAccessory());
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new FabricBackpackLoader());
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(FabricBackpackLoader.ID, FabricBackpackLoader::new);
     }
 }

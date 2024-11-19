@@ -10,6 +10,7 @@ import com.mrcrayfish.backpacked.core.ModContainers;
 import com.mrcrayfish.backpacked.core.ModItems;
 import io.wispforest.accessories.api.client.AccessoriesRendererRegistry;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -28,6 +29,7 @@ public class ClientHandler implements ClientModInitializer
     {
         ClientBootstrap.earlyInit();
         ClientBootstrap.init();
+        ModelLoadingPlugin.register(new BackpackedModelLoadingPlugin());
         MenuScreens.register(ModContainers.BACKPACK.get(), BackpackScreen::new);
         BlockEntityRenderers.register(ModBlockEntities.SHELF.get(), ShelfRenderer::new);
         AccessoriesRendererRegistry.registerNoRenderer(ModItems.BACKPACK.get());

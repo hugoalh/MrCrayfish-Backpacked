@@ -17,17 +17,11 @@ import java.util.Objects;
  */
 public class FabricBackpackLoader extends BackpackLoader implements IdentifiableResourceReloadListener
 {
-    private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "backpack_loader");
-    private static WeakReference<HolderLookup.Provider> providerRef;
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "backpack_loader");
 
-    public static void setProvider(HolderLookup.Provider provider)
+    public FabricBackpackLoader(HolderLookup.Provider provider)
     {
-        FabricBackpackLoader.providerRef = new WeakReference<>(provider);
-    }
-
-    public FabricBackpackLoader()
-    {
-        super(null);
+        super(provider);
     }
 
     @Override
@@ -37,18 +31,8 @@ public class FabricBackpackLoader extends BackpackLoader implements Identifiable
     }
 
     @Override
-    protected HolderLookup.Provider getProvider()
-    {
-        if(providerRef == null || providerRef.get() == null)
-            throw new IllegalStateException("Provider not available");
-        HolderLookup.Provider provider = providerRef.get();
-        return Objects.requireNonNull(provider);
-    }
-
-    @Override
     protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager manager, ProfilerFiller filler)
     {
         super.apply(map, manager, filler);
-        providerRef.clear();
     }
 }
